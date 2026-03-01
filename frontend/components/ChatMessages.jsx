@@ -89,12 +89,6 @@ const ChatMessage = ({ role, text, type, source, sourceUrl }) => {
         {!isUser && (
           <div className="flex flex-wrap items-center gap-2 pl-1">
             <SourceBadge type={type} />
-            {type === "predefined" && sourceUrl && (
-              <a href={sourceUrl} target="_blank" rel="noopener noreferrer"
-                className="text-[10px] font-medium text-white/35 underline underline-offset-2 hover:text-[#1f8a70]">
-                {source}
-              </a>
-            )}
           </div>
         )}
       </div>

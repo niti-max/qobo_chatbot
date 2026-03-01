@@ -13,13 +13,12 @@ const initialMessage = {
 
 const SUGGESTED = [
   "What is Qobo?",
-  "How much does Qobo cost?",
-  "How do I build a website with Qobo?",
-  "Can I preview before paying?",
-  "What's included in the annual plan?",
-  "Does Qobo include hosting?",
-  "Who is Qobo for?",
-  "How do I contact Qobo?",
+  "How does Qobo work?",
+  "Do I need coding knowledge to use Qobo?",
+  "Can I create an e-commerce website using Qobo?",
+  "What is the pricing of Qobo?",
+  "What if I need changes after going live?",
+  "Can I integrate payment gateways?",
 ];
 
 const createMessage = (payload) => ({ id: crypto.randomUUID(), ...payload });
