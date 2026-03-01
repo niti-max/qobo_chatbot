@@ -1,5 +1,5 @@
-const LoadingSpinner = () => {
-  return <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent" />;
-};
+const LoadingSpinner = () => (
+  <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+);
 
 export default LoadingSpinner;

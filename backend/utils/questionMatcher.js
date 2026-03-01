@@ -9,7 +9,9 @@ const STOP_WORDS = new Set([
   "how", "what", "when", "where", "why", "who", "which",
   "to", "of", "in", "on", "at", "by", "for", "with", "about", "from",
   "and", "or", "but", "if", "so", "that", "this", "there",
-  "have", "has", "had", "not", "no", "any", "some"
+  "have", "has", "had", "not", "no", "any", "some",
+  // Domain-universal term — present in every FAQ, carries no discriminative signal
+  "qobo"
 ]);
 
 const tokenize = (text = "") => {
@@ -46,6 +48,12 @@ const jaccardSimilarity = (setA, setB) => {
  */
 export const findBestMatch = (userQuery, candidates) => {
   const userTokens = tokenize(userQuery);
+
+  // If no meaningful content words remain after filtering (e.g. "what is qobo"),
+  // there is nothing to match against — fall through to Gemini.
+  if (userTokens.size === 0) {
+    return { match: null, similarity: 0 };
+  }
 
   let bestSimilarity = 0;
   let bestCandidate = null;

@@ -1,5 +1,6 @@
 import QoboFAQ from "../models/QoboFAQ.js";
-import { generateQoboAnswer, OUT_OF_SCOPE_MARKER } from "../services/geminiService.js";
+import { generateQoboAnswer, generateAnswerWithContext, OUT_OF_SCOPE_MARKER } from "../services/geminiService.js";
+import { fetchQoboCompanyContext } from "../services/socialContextService.js";
 import { findBestMatch, SIMILARITY_THRESHOLD } from "../utils/questionMatcher.js";
 
 const isGeminiQuotaError = (message = "") => /429|quota exceeded|rate limit|too many requests/i.test(message);
@@ -38,8 +39,9 @@ export const chatWithQobo = async (req, res) => {
       `[CHAT] query="${userQuery}" candidates=${candidates.length} similarity=${similarity.toFixed(3)} threshold=${SIMILARITY_THRESHOLD} source=${bestMatch ? "FAQ" : "Gemini"}`
     );
 
+    // ── TIER 1: Verified FAQ from MongoDB ─────────────────────────────────
     if (bestMatch) {
-      console.log(`[CHAT] Source=FAQ matched="${bestMatch.question}" similarity=${similarity.toFixed(3)}`);
+      console.log(`[CHAT] Tier=1 (FAQ) matched="${bestMatch.question}" similarity=${similarity.toFixed(3)}`);
       return res.json({
         answer: bestMatch.answer,
         source: "qobo.dev",
@@ -48,24 +50,32 @@ export const chatWithQobo = async (req, res) => {
       });
     }
 
+    // ── TIER 2: Scrape qobo.dev + social media, then answer with Gemini ───
     try {
-      const aiAnswer = await generateQoboAnswer(userQuery);
+      // Fetch live web context from qobo.dev and social profiles in parallel
+      const webContext = await fetchQoboCompanyContext();
 
-      // Model signals the question has nothing to do with Qobo.
+      const aiAnswer = webContext
+        ? await generateAnswerWithContext(userQuery, webContext)
+        : await generateQoboAnswer(userQuery);
+
+      // ── TIER 3: Question is unrelated to Qobo ─────────────────────────
       if (aiAnswer.trim().includes(OUT_OF_SCOPE_MARKER)) {
-        console.log(`[CHAT] Source=OutOfScope query="${userQuery}"`);
+        console.log(`[CHAT] Tier=3 (OutOfScope) query="${userQuery}"`);
         return res.json({
-          answer: "I'm only able to answer questions about Qobo and its platform. Your question appears to be outside that scope. Please ask me something about Qobo!",
+          answer: "I will answer questions related to Qobo only. Please ask me something about Qobo!",
           source: "system",
           type: "out-of-scope"
         });
       }
 
-      console.log("[CHAT] Source=Gemini");
+      const source = webContext ? "qobo.dev" : "gemini";
+      const type = webContext ? "web-sourced" : "ai-generated";
+      console.log(`[CHAT] Tier=2 source=${source} webContext=${!!webContext}`);
       return res.json({
         answer: aiAnswer,
-        source: "gemini",
-        type: "ai-generated"
+        source,
+        type
       });
     } catch (geminiError) {
       const message = geminiError?.message || "";
