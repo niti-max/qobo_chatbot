@@ -38,7 +38,7 @@ const ChatInput = ({ onSend, loading }) => {
             placeholder="Ask anything about Qobo..."
             disabled={loading}
             autoComplete="off"
-            className="flex-1 bg-transparent text-sm text-white placeholder:text-white/25 outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent text-base sm:text-sm text-white placeholder:text-white/25 outline-none disabled:opacity-50"
           />
 
           <button

@@ -78,7 +78,7 @@ const ChatMessage = ({ role, text, type, source, sourceUrl }) => {
   return (
     <div className={`flex items-end gap-2.5 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
       {isUser ? <UserAvatar /> : <BotAvatar />}
-      <div className={`flex max-w-[78%] flex-col gap-1.5 ${isUser ? "items-end" : "items-start"}`}>
+      <div className={`flex max-w-[88%] sm:max-w-[78%] flex-col gap-1.5 ${isUser ? "items-end" : "items-start"}`}>
         <div className={`rounded-2xl px-4 py-3 text-sm ${
           isUser
             ? "rounded-br-sm bg-[#1f8a70] text-white shadow-lg shadow-[#1f8a70]/20"

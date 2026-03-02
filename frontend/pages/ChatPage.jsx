@@ -127,7 +127,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#0d1117]">
+    <div className="flex h-[100dvh] flex-col overflow-hidden bg-[#0d1117]">
 
       {/* Mesh background */}
       <div className="pointer-events-none fixed inset-0 z-0" style={{
@@ -142,7 +142,7 @@ const ChatPage = () => {
             className="flex h-8 w-8 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/6 hover:text-white lg:hidden"
             onClick={() => setSidebarOpen((v) => !v)}
             aria-label="Toggle sidebar"
-          >bar
+          >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -195,8 +195,7 @@ const ChatPage = () => {
 
         {/* Sidebar — desktop always visible, mobile as drawer */}
         <div
-          style={{ width: typeof window !== "undefined" && window.innerWidth >= 1024 ? "22%" : undefined }}
-          className={`fixed inset-y-0 left-0 z-40 pt-[57px] transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:flex-shrink-0 lg:pt-0 lg:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-40 w-72 pt-[57px] transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-[22%] lg:flex-shrink-0 lg:pt-0 lg:translate-x-0 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
