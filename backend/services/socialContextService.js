@@ -16,20 +16,12 @@ const QOBO_PAGES = [
 const SOCIAL_PAGES = [
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/company/qobo",
+    url: "https://www.linkedin.com/company/qobodev",
   },
   {
     name: "Instagram",
     url: "https://www.instagram.com/qobo.dev/",
-  },
-  {
-    name: "Twitter/X",
-    url: "https://twitter.com/qobodev",
-  },
-  {
-    name: "Facebook",
-    url: "https://www.facebook.com/qobo.dev",
-  },
+  }  
 ];
 
 const headers = {
